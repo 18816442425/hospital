@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itheima.dao.PatientDao">
+
+    <!--分页查询-->
+    <select id="getPatientList" parameterType="Patient" resultType="Patient">
+        select *from patient
+        <where>
+            <if test="p_name!=null and p_name!='' ">
+                and p_name like '%${p_name}%'
+            </if>
+            <if test="p_house!=null and p_house!=''">
+                and p_house like '%${p_house}%'
+            </if>
+        </where>
+        ORDER BY p_id asc
+        limit #{currentPage},#{pageSize}
+    </select>
+    <!--查询数据总数-->
+    <select id="totalCount" resultType="Integer">
+        select count(p_id) from patient
+        <where>
+            <if test="p_name!=null and p_name!='' ">
+                and p_name like '%${p_name}%'
+            </if>
+            <if test="p_house!=null and p_house!=''">
+                and p_house like '%${p_house}%'
+            </if>
+        </where>
+    </select>
+
+    <!--通过id删除班级信息-->
+    <delete id="deletePatient" parameterType="Integer">
+        delete from patient where p_id=#{p_id}
+    </delete>
+
+
+    <select id="findPatientById" parameterType="Integer" resultType="Patient">
+        select * from patient where p_id=#{p_id}
+    </select>
+    <!--修改班级信息-->
+    <update id="updatePatient" parameterType="Patient">
+        update patient
+        <set>
+            <if test="p_name!=null and p_name!=''">
+                p_name=#{p_name},
+            </if>
+            <if test="p_age !=null and p_age !=''">
+                p_age=#{p_age},
+            </if>
+            <if test="p_address !=null and p_address !=''">
+                p_address=#{p_address},
+            </if>
+            <if test="p_phone !=null and p_phone !=''">
+                p_phone=#{p_phone},
+            </if>
+            <if test="p_matter !=null and p_matter !=''">
+                p_matter=#{p_matter},
+            </if>
+            <if test="p_house !=null and p_house !=''">
+                p_house=#{p_house},
+            </if>
+        </set>
+        where p_id = #{p_id}
+    </update>
+
+    <insert id="patientRegister" parameterType="Account" keyProperty="id" useGeneratedKeys="true">
+        insert into account(username,password) values(#{username},#{password});
+    </insert>
+
+    <select id="searchPatient" parameterType="Account" resultType="Account">
+        select * from account
+        where
+        <if test="username!=null and username!='' ">
+            username = #{username}
+        </if>
+    </select>
+
+</mapper>

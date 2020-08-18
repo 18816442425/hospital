@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itheima.dao.DoctorDao">
+
+    <!--分页查询-->
+    <select id="getDoctorList" parameterType="Doctor" resultType="Doctor">
+        select *from doctor
+        <where>
+            <if test="d_name!=null and d_name!='' ">
+                and d_name like '%${d_name}%'
+            </if>
+            <if test="d_doctorid!=null and d_doctorid!=0">
+                and d_doctorid like '%${d_doctorid}%'
+            </if>
+            <if test="d_house!=null and d_house!='' ">
+                and d_house like '%${d_house}%'
+            </if>
+        </where>
+        ORDER BY d_id asc
+        limit #{currentPage},#{pageSize}
+    </select>
+    <!--查询数据总数-->
+    <select id="totalCount" resultType="Integer">
+        select count(d_doctorid) from doctor
+        <where>
+            <if test="d_name!=null and d_name!='' ">
+                and d_name like '%${d_name}%'
+            </if>
+            <if test="d_doctorid!=null and d_doctorid!=0">
+                and d_doctorid like '%${d_doctorid}%'
+            </if>
+            <if test="d_house!=null and d_house!='' ">
+                and d_house like '%${d_house}%'
+            </if>
+        </where>
+    </select>
+    <!--通过id删除医生信息-->
+    <delete id="deleteDoctor" parameterType="Integer">
+        delete from doctor where d_id=#{d_id}
+    </delete>
+
+    <select id="findDoctorById" parameterType="Integer" resultType="Doctor">
+        select * from doctor where d_id=#{d_id}
+    </select>
+    <!--修改医生信息-->
+    <update id="updateDoctor" parameterType="Doctor">
+        update doctor
+        <set>
+            <if test="d_doctorid!=null and d_doctorid!=0">
+                d_doctorid=#{d_doctorid},
+            </if>
+            <if test="d_name !=null and d_name !=''">
+                d_name=#{d_name},
+            </if>
+            <if test="d_house !=null and d_house !=''">
+                d_house=#{d_house},
+            </if>
+            <if test="d_phone !=null and d_phone !=''">
+                d_phone=#{d_phone},
+            </if>
+            <if test="d_status !=null and d_status !=''">
+                d_status=#{d_status},
+            </if>
+        </set>
+        where d_id = #{d_id}
+    </update>
+
+    <select id="getAll" resultType="Doctor">
+        select * from doctor;
+    </select>
+
+    <select id="findPaiban" resultType="Paiban">
+        select * from paiban;
+    </select>
+
+    <select id="editPaiban" resultType="Paiban">
+        select * from paiban;
+    </select>
+
+    <update id="updatePaiban" parameterType="Paiban">
+        update paiban
+        <set>
+            <if test="xqy!=null and xqy!=''">
+                xqy=#{xqy},
+            </if>
+            <if test="xqe !=null and xqe !=''">
+                xqe=#{xqe},
+            </if>
+            <if test="xqs !=null and xqs !=''">
+                xqs=#{xqs},
+            </if>
+            <if test="xqf !=null and xqf !=''">
+                xqf=#{xqf},
+            </if>
+            <if test="xqw !=null and xqw !=''">
+                xqw=#{xqw},
+            </if>
+            <if test="xql !=null and xql !=''">
+                xql=#{xql},
+            </if>
+        </set>
+    </update>
+
+    <select id="findAccount" parameterType="DoAccount" resultType="DoAccount">
+        select * from doaccount
+        where
+        <if test="d_username!=null and d_username!='' ">
+            d_username = #{d_username}
+        </if>
+        <if test="d_password!=null and d_password!='' ">
+            and d_password = #{d_password}
+        </if>
+    </select>
+</mapper>
